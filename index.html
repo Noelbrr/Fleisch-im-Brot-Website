@@ -350,7 +350,7 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   position:relative;z-index:2;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:clamp(64px,14vw,130px) 24px;
-  min-height:70vh;
+  min-height:100vh;
   overflow:hidden;
 }
 
@@ -942,10 +942,10 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
         var progress = (vh - rect.top) / total;
         progress = Math.max(0, Math.min(1, progress));
 
-        // Zeilen wandern in die ersten ~35% der Passage rein und stehen ab da fest.
-        var sx = Math.min(1, progress / 0.35);
-        // Tagline fliegt kurz danach von unten rein, statt erst am Ende.
-        var tyOp = Math.max(0, Math.min(1, (progress - 0.3) / 0.3));
+        // Zeilen wandern langsam über die ersten ~75% der Passage rein.
+        var sx = Math.min(1, progress / 0.75);
+        // Tagline setzt später ein und fliegt über die letzten ~40% sanft hoch.
+        var tyOp = Math.max(0, Math.min(1, (progress - 0.55) / 0.4));
 
         credoLineL.style.setProperty('--sx', sx);
         credoLineR.style.setProperty('--sx', sx);
