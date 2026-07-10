@@ -85,6 +85,12 @@ h2{
   line-height:1.02;
   font-size:clamp(2rem,7vw,2.9rem);
 }
+/* Desktop: +15px auf den Section-Headlines ("Das Beste vom Besten",
+   "Frisch vom Grill, direkt ins Brot", "Distelrather Str. 3 in Düren"),
+   die alle diese globale h2-Regel teilen. */
+@media(min-width:860px){
+  h2{font-size:clamp(2.94rem,7vw,3.84rem);}
+}
 
 .section-head{margin-bottom:clamp(32px,6vw,52px);}
 .section-head p.lede{
