@@ -520,7 +520,12 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
    beanspruchen — die Zacken-Täler zeigen dadurch direkt deren Fläche,
    ohne einen separaten Hintergrund-Rahmen dazwischen. Der glatte Rand
    bleibt exakt an der Section-Grenze zur nächsten (hellen) Section. */
-.tear{display:block;width:100%;height:0;line-height:0;position:relative;z-index:3;}
+/* overflow:hidden erzeugt einen neuen Block-Formatting-Context, damit der
+   negative margin-top des SVG-Kindes nicht per Margin-Collapsing nach außen
+   auf .tear (height:0) durchschlägt und den gesamten nachfolgenden Fluss
+   mitverschiebt — das war die Ursache für die Linie/Überlappung zwischen
+   den Sections. */
+.tear{display:block;width:100%;height:0;line-height:0;position:relative;z-index:3;overflow:hidden;}
 .tear svg{width:100%;height:44px;display:block;}
 .tear--to-bone svg{margin-top:-44px;color:var(--bone);}
 .tear--to-ink{color:var(--bone);}
