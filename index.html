@@ -157,7 +157,7 @@ h2{
   .reveal{transition-duration:.01ms;transform:none;}
   .stamp__rotor,.scroll-cue__chevron,.status-dot--pulse{animation:none !important;}
   .credo__glow,.credo__sparks span{animation:none !important;}
-  .credo__word{opacity:1 !important;filter:none !important;transform:none !important;}
+  .credo__line,.credo__tagline--rise{transform:none !important;opacity:1 !important;}
 }
 noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 
@@ -343,14 +343,15 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   100%{transform:translateY(-92vh) scale(1.1);opacity:0;}
 }
 
-/* Zwei Text-Blöcke normal untereinander im Fluss. Jeder blendet ein,
-   sobald er per IntersectionObserver ins Bild scrollt (Klasse .is-visible),
-   die Wörter darin bauen sich dann zeitversetzt nacheinander auf. */
+/* Text-Block normal im Fluss (kein Pin). Die Zeilen hängen live am globalen
+   Scroll-Fortschritt (--sx / --ty, per JS pro Frame gesetzt) statt an einem
+   einmaligen Enter-Trigger — daher keine transition, reine 1:1-Kopplung. */
 .credo__screen{
   position:relative;z-index:2;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:clamp(56px,12vw,110px) 24px;
-  min-height:60vh;
+  text-align:center;padding:clamp(64px,14vw,130px) 24px;
+  min-height:70vh;
+  overflow:hidden;
 }
 
 .credo__eyebrow{
@@ -359,39 +360,37 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 }
 .credo__title{
   font-family:'Anton',sans-serif;color:var(--bone);text-transform:uppercase;
-  line-height:.98;font-size:clamp(2.5rem,12vw,5.2rem);
-  display:flex;flex-direction:column;gap:.02em;
+  /* vw-Anteil bewusst niedrig gehalten, damit "und Frisches Brot" (die längere
+     Zeile) auf jeder Viewport-Breite garantiert in eine Zeile passt. */
+  line-height:.98;font-size:clamp(2rem,8.2vw,5.6rem);
+  display:flex;flex-direction:column;gap:.04em;
+  width:100%;
 }
-.credo__line{display:block;}
+.credo__line{
+  display:block;
+  white-space:nowrap;
+  will-change:transform;
+}
 .credo__line--r{color:var(--ember);}
 
-/* Wort-für-Wort Intro-Animation: jedes Wort/Bullet bekommt per JS sein
-   eigenes --p (0–1), das nacheinander hochzählt — scharf/bold statt nur Fade. */
-.credo__word{
-  display:inline-block;
-  opacity:var(--p,0);
-  filter:blur(calc((1 - var(--p,0)) * 14px));
-  transform:translateY(calc((1 - var(--p,0)) * .4em)) scale(calc(.9 + var(--p,0) * .1));
-  font-weight:800;
-  transition:opacity .3s cubic-bezier(.2,.7,.2,1), filter .3s cubic-bezier(.2,.7,.2,1), transform .3s cubic-bezier(.2,.7,.2,1);
+/* Von links kommend: startet weit links + leicht transparent, wandert auf 0. */
+.credo__line--from-left{
+  transform:translateX(calc((1 - var(--sx,0)) * -60vw));
 }
-
-.credo__list{
-  display:flex;flex-direction:column;gap:14px;
-  margin-bottom:clamp(28px,5vw,44px);
+/* Von rechts kommend: startet weit rechts, wandert auf 0. */
+.credo__line--from-right{
+  transform:translateX(calc((1 - var(--sx,0)) * 60vw));
 }
-.credo__list .credo__word{
-  display:block;
-  font-family:'Anton',sans-serif;color:var(--bone);text-transform:uppercase;
-  letter-spacing:-.01em;line-height:1.05;
-  font-size:clamp(1.5rem,6.5vw,2.6rem);
-}
-.credo__list li:nth-child(3) .credo__word,
-.credo__list li:nth-child(3).credo__word{color:var(--ember);}
 
 .credo__tagline{
   font-family:'Space Mono',monospace;text-transform:uppercase;color:var(--smoke);
-  font-size:.8rem;letter-spacing:.14em;margin-top:6px;
+  font-size:.8rem;letter-spacing:.14em;margin-top:22px;
+  will-change:transform, opacity;
+}
+/* Fliegt von unten rein, erst gegen Ende der Section-Passage. */
+.credo__tagline--rise{
+  opacity:var(--ty-op,0);
+  transform:translateY(calc((1 - var(--ty-op,0)) * 3em));
 }
 
 /* ============================================================
@@ -614,20 +613,12 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
       </div>
 
       <div class="credo__screen" id="credoScreen1">
-        <p class="credo__eyebrow"><span class="credo__word">Unser</span> <span class="credo__word">Prinzip</span></p>
+        <p class="credo__eyebrow">Unser Prinzip</p>
         <h2 class="credo__title">
-          <span class="credo__line"><span class="credo__word">Nur</span> <span class="credo__word">Fleisch</span></span>
-          <span class="credo__line credo__line--r"><span class="credo__word">und</span> <span class="credo__word">Frisches</span> <span class="credo__word">Brot</span></span>
+          <span class="credo__line credo__line--from-left" id="credoLineL">Nur Fleisch</span>
+          <span class="credo__line credo__line--r credo__line--from-right" id="credoLineR">und Frisches Brot</span>
         </h2>
-      </div>
-
-      <div class="credo__screen" id="credoScreen2">
-        <ul class="credo__list">
-          <li class="credo__word">Kein Fließband</li>
-          <li class="credo__word">Kein Fertigprodukt</li>
-          <li class="credo__word">Nur Glut, Fleisch und Brot</li>
-        </ul>
-        <p class="credo__tagline"><span class="credo__word">Jeden Tag frisch.</span></p>
+        <p class="credo__tagline credo__tagline--rise" id="credoTagline">Jeden Tag frisch.</p>
       </div>
     </div>
   </section>
@@ -925,43 +916,53 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
     }, {passive:true});
   }
 
-  /* ---------- Credo-Sektion: Wörter/Zeilen bauen sich nacheinander "bold" auf, sobald der jeweilige Block ins Bild scrollt ----------
-     Reversibel: verlässt der Block den Viewport (in beide Richtungen), werden die
-     Wörter zurückgesetzt, sodass die Staffelung beim erneuten Reinscrollen wieder abläuft. */
-  var credoScreens = document.querySelectorAll('.credo__screen');
+  /* ---------- Credo-Sektion: Live-Scroll-Parallax (kein Enter-Trigger, keine transition) ----------
+     "Nur Fleisch" wandert von links, "und Frisches Brot" von rechts, beide 1:1 an
+     den Scroll-Fortschritt der Section gekoppelt. "Jeden Tag frisch." fliegt am
+     Ende der Passage von unten rein. Reversibel von Natur aus, da --sx/--ty-op
+     bei jedem Scroll-Event neu aus der aktuellen Position berechnet werden. */
+  var credoLineL = document.getElementById('credoLineL');
+  var credoLineR = document.getElementById('credoLineR');
+  var credoTagline = document.getElementById('credoTagline');
 
-  if(credoScreens.length){
+  if(credoLineL && credoLineR && credoTagline){
     if(reduceMotion){
-      credoScreens.forEach(function(screen){
-        screen.querySelectorAll('.credo__word').forEach(function(w){ w.style.setProperty('--p', 1); });
-      });
-    } else if('IntersectionObserver' in window){
-      var credoTimers = new WeakMap();
-
-      var credoIO = new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){
-          var words = entry.target.querySelectorAll('.credo__word');
-          var pending = credoTimers.get(entry.target);
-          if(pending) pending.forEach(clearTimeout);
-
-          if(entry.isIntersecting){
-            var n = words.length;
-            var timers = [];
-            words.forEach(function(w, i){
-              timers.push(window.setTimeout(function(){ w.style.setProperty('--p', 1); }, i * (600 / n)));
-            });
-            credoTimers.set(entry.target, timers);
-          } else {
-            credoTimers.delete(entry.target);
-            words.forEach(function(w){ w.style.setProperty('--p', 0); });
-          }
-        });
-      }, {threshold:.4});
-      credoScreens.forEach(function(screen){ credoIO.observe(screen); });
+      credoLineL.style.setProperty('--sx', 1);
+      credoLineR.style.setProperty('--sx', 1);
+      credoTagline.style.setProperty('--ty-op', 1);
     } else {
-      credoScreens.forEach(function(screen){
-        screen.querySelectorAll('.credo__word').forEach(function(w){ w.style.setProperty('--p', 1); });
-      });
+      var credoSection = document.getElementById('credo');
+
+      var updateCredoParallax = function(){
+        var rect = credoSection.getBoundingClientRect();
+        var vh = window.innerHeight;
+        // Fortschritt 0→1 über die gesamte Durchlaufstrecke der Section:
+        // 0 sobald die Section von unten den Viewport erreicht, 1 sobald sie oben verlässt.
+        var total = rect.height + vh;
+        var progress = (vh - rect.top) / total;
+        progress = Math.max(0, Math.min(1, progress));
+
+        // Zeilen wandern in die ersten ~35% der Passage rein und stehen ab da fest.
+        var sx = Math.min(1, progress / 0.35);
+        // Tagline fliegt kurz danach von unten rein, statt erst am Ende.
+        var tyOp = Math.max(0, Math.min(1, (progress - 0.3) / 0.3));
+
+        credoLineL.style.setProperty('--sx', sx);
+        credoLineR.style.setProperty('--sx', sx);
+        credoTagline.style.setProperty('--ty-op', tyOp);
+      };
+
+      var credoTicking = false;
+      window.addEventListener('scroll', function(){
+        if(credoTicking) return;
+        credoTicking = true;
+        window.requestAnimationFrame(function(){
+          updateCredoParallax();
+          credoTicking = false;
+        });
+      }, {passive:true});
+
+      updateCredoParallax();
     }
   }
 
