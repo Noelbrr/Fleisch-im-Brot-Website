@@ -532,16 +532,18 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 .tear--to-ink{color:var(--bone);}
 .tear--to-ink svg{transform:scaleY(-1);}
 
-/* Nur Desktop: bei DPR 1x (typisch für Desktop-Displays, anders als die
-   meist höhere Pixeldichte auf Mobile) macht ein Sub-Pixel-Rundungsfehler
-   beim Skalieren des SVG auf volle Breite eine hauchdünne Linie am unteren
-   Rand der Zacken-Fläche sichtbar. 1px zusätzliche Höhe schiebt diese Kante
-   um 1px über die Section-Grenze hinaus, sodass der Rundungsfehler in der
-   gefüllten Fläche verschwindet statt an ihrem Rand sichtbar zu werden. */
-@media(min-width:860px){
-  .tear svg{height:45px;}
-  .tear--to-bone svg{margin-top:-45px;}
+/* Deckt einen minimalen Spalt an der Section-Naht ab (durch Sub-Pixel-
+   Rundung beim Skalieren des SVG auf volle Breite), der auf Desktop als
+   dünne Linie in der Farbe der VORHERIGEN Section sichtbar wird. Ein 2px
+   Steg in der Farbe der NÄCHSTEN Section liegt direkt auf der Naht und
+   überdeckt sie unabhängig von Rundungsfehlern. */
+.tear::after{
+  content:"";
+  position:absolute;left:0;right:0;height:2px;
+  background:currentColor;
 }
+.tear--to-bone::after{bottom:-1px;color:var(--bone);}
+.tear--to-ink::after{top:-1px;color:var(--ink);}
 
 /* ============================================================
    FOOTER
