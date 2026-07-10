@@ -363,7 +363,7 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   /* vw-Anteil so kalibriert, dass "und Frisches Brot" (die längere Zeile) auf
      jeder Mobile-Breite (320–414px) gerade noch einzeilig passt, aber so groß
      wie möglich bleibt. */
-  line-height:.98;font-size:clamp(2rem,11.5vw,5.6rem);
+  line-height:.98;font-size:clamp(2rem,11.5vw,9rem);
   display:flex;flex-direction:column;gap:.04em;
   width:100%;
 }
@@ -508,10 +508,16 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 /* ============================================================
    TORN-DIVIDER (Motiv: aufgerissenes Brot / Papier)
    ============================================================ */
-.tear{display:block;width:100%;line-height:0;position:relative;z-index:3;}
+/* Das Element wird per negativem Margin komplett auf die vorherige
+   (dunkle) Section gezogen, statt einen eigenen Platz im Fluss zu
+   beanspruchen — die Zacken-Täler zeigen dadurch direkt deren Fläche,
+   ohne einen separaten Hintergrund-Rahmen dazwischen. Der glatte Rand
+   bleibt exakt an der Section-Grenze zur nächsten (hellen) Section. */
+.tear{display:block;width:100%;height:0;line-height:0;position:relative;z-index:3;}
 .tear svg{width:100%;height:44px;display:block;}
-.tear--to-bone{margin-top:-1px;color:var(--bone);background:var(--ink);}
-.tear--to-ink{margin-top:-1px;color:var(--bone);background:var(--ink);transform:scaleY(-1);}
+.tear--to-bone svg{margin-top:-44px;color:var(--bone);}
+.tear--to-ink{color:var(--bone);}
+.tear--to-ink svg{transform:scaleY(-1);}
 
 /* ============================================================
    FOOTER
