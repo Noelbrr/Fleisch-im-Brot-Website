@@ -224,22 +224,15 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
    ============================================================ */
 .hero{
   position:relative;
-  /* Kein 100svh hier: In-App-Browser wie Snapchat/Instagram berechnen das
-     nativ live neu, sobald ihre UI-Leiste ein-/ausblendet, wodurch der
-     Innenabstand zum Content sichtbar "atmet". --vh (JS, 1× beim Laden/
-     Rotation gemessen, siehe <script> unten) ist die einzige Instanz, die
-     dort garantiert stabil bleibt. 100vh bleibt nur als Fallback für
-     Browser ganz ohne Custom-Property-Unterstützung.
-     height statt nur min-height: blendet die UI-Leiste aus (Viewport wird
-     größer), darf die Section nicht mitwachsen — sonst bleibt der unten
-     angedockte Content (justify-content:flex-end) an der alten, jetzt zu
-     kleinen Höhe kleben und wirkt, als würde er nach oben wegrutschen,
-     während unten neuer Weißraum entsteht. Eine feste Höhe hält den
-     Content immer exakt am unteren Bildschirmrand. */
+  /* Feste Höhe (nicht min-height!) über --vh, den global per JS einmalig
+     gemessenen, stabilen Viewport-Wert (siehe <script> unten). Verhindert,
+     dass die Section wächst, wenn die Browser-/In-App-UI-Leiste ausblendet
+     — sonst bliebe der unten angedockte Content (justify-content:flex-end)
+     an der alten Höhe kleben und der neue Weißraum darunter läse sich wie
+     ein Wegrutschen des Contents nach oben. 100vh nur als Fallback für
+     Browser ohne Custom-Property-Unterstützung. */
   height:100vh;
   height:calc(var(--vh, 1vh) * 100);
-  min-height:100vh;
-  min-height:calc(var(--vh, 1vh) * 100);
   display:flex;
   flex-direction:column;
   justify-content:flex-end;
