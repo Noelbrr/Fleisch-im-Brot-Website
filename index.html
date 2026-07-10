@@ -250,13 +250,27 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   display:flex;flex-direction:column;align-items:flex-start;gap:14px;
 }
 
-.stamp{width:118px;height:118px;color:var(--bone);margin-bottom:6px;}
+/* Mobile: .stamp sitzt oben in der Hero-Section, mit demselben Innenabstand
+   wie .hero__content (22px seitlich), unabhängig von dessen Höhe. */
+.stamp{
+  position:absolute;top:22px;left:22px;z-index:2;
+  width:118px;height:118px;color:var(--bone);
+}
 .stamp__rotor{animation:spin 38s linear infinite;transform-origin:60px 60px;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .stamp text{
   font-family:'Space Mono',monospace;
   font-size:9.4px;letter-spacing:1.5px;
   fill:var(--bone);text-transform:uppercase;
+}
+
+/* Desktop: Stempel-Badge wandert stattdessen unten rechts in die Ecke der
+   Hero-Section, statt oben über dem Titel zu stehen. */
+@media(min-width:860px){
+  .stamp{
+    top:auto;left:auto;right:40px;bottom:40px;
+    width:150px;height:150px;
+  }
 }
 
 .hero__title{
@@ -601,16 +615,19 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
     </div>
     <div class="hero__scrim"></div>
 
-    <div class="hero__content">
-      <!-- Signatur-Element: rotierendes Stempel-Badge passend zum Brot-Logo -->
-      <svg class="stamp" viewBox="0 0 120 120" aria-hidden="true">
-        <g class="stamp__rotor">
-          <path id="stampCircleHero" fill="none" d="M60,10 a50,50 0 1,1 -0.1,0"/>
-          <text><textPath href="#stampCircleHero">EKMEK ARASI • SINCE 2026 • DÜREN • </textPath></text>
-        </g>
-        <image class="stamp__logo" href="PKNs_Fleisch_im_Brot_Logo_Transparent_Dueren_Web.webp" x="19" y="37" width="82" height="46" preserveAspectRatio="xMidYMid meet"/>
-      </svg>
+    <!-- Signatur-Element: rotierendes Stempel-Badge passend zum Brot-Logo.
+         Liegt bewusst außerhalb von .hero__content, damit es auf Desktop
+         unabhängig von dessen Höhe unten rechts in der Section-Ecke sitzen
+         kann (siehe @media(min-width:860px) bei .stamp). -->
+    <svg class="stamp" viewBox="0 0 120 120" aria-hidden="true">
+      <g class="stamp__rotor">
+        <path id="stampCircleHero" fill="none" d="M60,10 a50,50 0 1,1 -0.1,0"/>
+        <text><textPath href="#stampCircleHero">EKMEK ARASI • SINCE 2026 • DÜREN • </textPath></text>
+      </g>
+      <image class="stamp__logo" href="PKNs_Fleisch_im_Brot_Logo_Transparent_Dueren_Web.webp" x="19" y="37" width="82" height="46" preserveAspectRatio="xMidYMid meet"/>
+    </svg>
 
+    <div class="hero__content">
       <h1 class="hero__title">PNK<span class="accent">’S</span><br>Fleisch im Brot</h1>
       <p class="hero__subtitle">Ekmek Arası · Frisches Fleisch im Brot · Düren</p>
 
