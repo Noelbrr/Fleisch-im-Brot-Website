@@ -880,6 +880,13 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* In-App-Browser (Snapchat, Instagram etc.) ändern window.innerHeight laufend,
+     wenn ihre UI beim Scrollen ein-/ausblendet. Für Scroll-Berechnungen daher
+     einen gecachten Wert verwenden, der nur bei echtem Resize aktualisiert wird
+     — sonst "zittern" scroll-gekoppelte Animationen mit der UI mit. */
+  var cachedViewportHeight = window.innerHeight;
+  window.addEventListener('resize', function(){ cachedViewportHeight = window.innerHeight; }, {passive:true});
+
   /* ---------- Scroll-Reveal ---------- */
   var revealEls = document.querySelectorAll('.reveal');
   if('IntersectionObserver' in window){
@@ -916,7 +923,7 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
       if(!ticking){
         window.requestAnimationFrame(function(){
           var y = window.scrollY || window.pageYOffset;
-          if(y < window.innerHeight * 1.2){
+          if(y < cachedViewportHeight * 1.2){
             heroMedia.style.transform = 'translateY(' + (y * 0.18) + 'px)';
           }
           ticking = false;
@@ -945,7 +952,7 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 
       var updateCredoParallax = function(){
         var rect = credoSection.getBoundingClientRect();
-        var vh = window.innerHeight;
+        var vh = cachedViewportHeight;
         // Fortschritt 0→1 über die gesamte Durchlaufstrecke der Section:
         // 0 sobald die Section von unten den Viewport erreicht, 1 sobald sie oben verlässt.
         var total = rect.height + vh;
