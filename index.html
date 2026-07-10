@@ -224,12 +224,13 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
    ============================================================ */
 .hero{
   position:relative;
-  /* Kaskade von unsicher nach sicher: 100vh (Fallback) → 100svh (ignoriert
-     UI-Leisten, moderne Browser) → --vh (JS, 1× beim Laden/Rotation gemessen)
-     als robuster Fallback für In-App-Browser (Snapchat, Instagram etc.), die
-     svh nicht sauber unterstützen oder bei UI-Wacklern trotzdem "atmen". */
+  /* Kein 100svh hier: In-App-Browser wie Snapchat/Instagram berechnen das
+     nativ live neu, sobald ihre UI-Leiste ein-/ausblendet, wodurch der
+     Innenabstand zum Content sichtbar "atmet". --vh (JS, 1× beim Laden/
+     Rotation gemessen, siehe <script> unten) ist die einzige Instanz, die
+     dort garantiert stabil bleibt. 100vh bleibt nur als Fallback für
+     Browser ganz ohne Custom-Property-Unterstützung. */
   min-height:100vh;
-  min-height:100svh;
   min-height:calc(var(--vh, 1vh) * 100);
   display:flex;
   flex-direction:column;
@@ -355,8 +356,9 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   position:relative;z-index:2;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:clamp(64px,14vw,130px) 24px;
+  /* Kein 100svh: atmet in In-App-Browsern mit der UI-Leiste mit. --vh (JS)
+     bleibt stabil, siehe Kommentar bei .hero. */
   min-height:100vh;
-  min-height:100svh;
   min-height:calc(var(--vh, 1vh) * 100);
   overflow:hidden;
 }
