@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="theme-color" content="#141311">
+<meta name="color-scheme" content="dark">
+<title>Impressum — PNK’S Fleisch im Brot</title>
+<meta name="description" content="Impressum von PNK’S Fleisch im Brot, Ekmek Arası in Düren.">
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:        #141311;
+  --bone:       #f5f0e6;
+  --ember:      #c8451c;
+  --ember-light:#ef8a4c;
+  --smoke:      #b7ae9d;
+  --line-dark:  rgba(245,240,230,.16);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--bone);
+  font-family:'Manrope',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--ember-light);text-decoration:underline;}
+
+.wrap{
+  width:100%;
+  max-width:640px;
+  margin-inline:auto;
+  padding:calc(24px + env(safe-area-inset-top)) 22px 80px;
+}
+@media(min-width:860px){
+  .wrap{max-width:760px;padding-inline:32px;}
+}
+
+.back{
+  display:inline-block;
+  font-family:'Space Mono',monospace;font-size:.78rem;
+  text-transform:uppercase;letter-spacing:.06em;
+  color:var(--smoke);margin-bottom:32px;
+}
+.back:hover{color:var(--ember-light);}
+
+h1{
+  font-family:'Anton',sans-serif;text-transform:uppercase;
+  font-size:clamp(2rem,7vw,2.8rem);line-height:1.02;
+  margin:0 0 28px;color:var(--bone);
+}
+h2{
+  font-family:'Space Mono',monospace;text-transform:uppercase;
+  font-size:.85rem;letter-spacing:.08em;color:var(--ember-light);
+  margin:36px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line-dark);
+}
+p{line-height:1.6;margin:0 0 10px;color:var(--bone);}
+.placeholder{color:var(--smoke);font-style:italic;}
+
+.footer-note{
+  margin-top:48px;padding-top:20px;border-top:1px solid var(--line-dark);
+  font-family:'Space Mono',monospace;font-size:.72rem;color:var(--smoke);
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="index.html">← Zurück zur Startseite</a>
+
+  <h1>Impressum</h1>
+
+  <h2>Angaben gemäß § 5 TMG</h2>
+  <p>
+    PNK’S Fleisch im Brot<br>
+    Ekmek Arası<br>
+    Distelrather Str. 3<br>
+    52351 Düren
+  </p>
+
+  <h2>Inhaber / Geschäftsführer</h2>
+  <p class="placeholder">[Vollständiger Name des Inhabers/Geschäftsführers folgt]</p>
+
+  <h2>Rechtsform</h2>
+  <p class="placeholder">[Rechtsform folgt — z. B. Einzelunternehmen, GmbH, GbR]</p>
+
+  <h2>Kontakt</h2>
+  <p>
+    E-Mail: <span class="placeholder">[folgt]</span><br>
+    Telefon: <span class="placeholder">[folgt]</span>
+  </p>
+
+  <h2>Umsatzsteuer-ID</h2>
+  <p class="placeholder">[Falls vorhanden: Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG folgt]</p>
+
+  <h2>Handelsregister</h2>
+  <p class="placeholder">[Falls zutreffend: Registergericht und Registernummer folgen]</p>
+
+  <h2>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+  <p class="placeholder">[Name und Anschrift folgen]</p>
+
+  <div class="footer-note">
+    Diese Seite ist noch unvollständig und wird zeitnah mit den fehlenden Pflichtangaben ergänzt.
+  </div>
+</div>
+
+</body>
+</html>
