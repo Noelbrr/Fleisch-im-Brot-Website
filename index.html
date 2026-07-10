@@ -1082,15 +1082,16 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
         var progress = (vh - rect.top) / total;
         progress = Math.max(0, Math.min(1, progress));
 
-        // Zeilen wandern über die ersten ~60% der Passage rein, mit Ease-Out
-        // (kubisch), damit die Bewegung sanft ausklingt statt linear hart
-        // bei sx=1 zu stoppen.
-        var sxLinear = Math.min(1, progress / 0.6);
-        var sx = 1 - Math.pow(1 - sxLinear, 3);
-        // Tagline fliegt direkt im Anschluss über die restlichen ~35% hoch,
-        // ebenfalls mit Ease-Out.
-        var tyOpLinear = Math.max(0, Math.min(1, (progress - 0.4) / 0.35));
-        var tyOp = 1 - Math.pow(1 - tyOpLinear, 3);
+        // Zeilen wandern über die GESAMTE Passage (0→1) rein, mit sanftem
+        // Ease-Out (quadratisch, milder als die vorherige kubische Kurve).
+        // Vorher lief das Fenster nur bis 0.6 mit einer kubischen Kurve, die
+        // am Anfang so stark beschleunigt, dass die Bewegung schon bei ~60%
+        // Scrollstrecke gefühlt fertig war — das war das "zu früh"-Problem.
+        var sx = 1 - Math.pow(1 - progress, 2);
+        // Tagline folgt zeitversetzt, läuft aber ebenfalls über einen langen
+        // Teil der Passage statt in einem kurzen Fenster am Ende.
+        var tyOpLinear = Math.max(0, Math.min(1, (progress - 0.15) / 0.85));
+        var tyOp = 1 - Math.pow(1 - tyOpLinear, 2);
 
         credoLineL.style.setProperty('--sx', sx);
         credoLineR.style.setProperty('--sx', sx);
