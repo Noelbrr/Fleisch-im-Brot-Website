@@ -364,10 +364,10 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 }
 .credo__title{
   font-family:'Anton',sans-serif;color:var(--bone);text-transform:uppercase;
-  /* vw-Anteil so kalibriert, dass "Nur Fleisch" (jetzt die längere Zeile) auf
+  /* vw-Anteil so kalibriert, dass "und leckeres Brot" (die längere Zeile) auf
      jeder Mobile-Breite (320–414px) einzeilig passt, aber so groß wie möglich
      bleibt. */
-  line-height:.98;font-size:clamp(2rem,17.5vw,9rem);
+  line-height:.98;font-size:clamp(2rem,10.8vw,9rem);
   display:flex;flex-direction:column;gap:.04em;
   width:100%;
 }
@@ -625,8 +625,8 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
       <div class="credo__screen" id="credoScreen1">
         <p class="credo__eyebrow">Unser Prinzip</p>
         <h2 class="credo__title">
-          <span class="credo__line credo__line--from-left" id="credoLineL">Nur Fleisch</span>
-          <span class="credo__line credo__line--r credo__line--from-right" id="credoLineR">und Brot</span>
+          <span class="credo__line credo__line--from-left" id="credoLineL">Frisches Fleisch</span>
+          <span class="credo__line credo__line--r credo__line--from-right" id="credoLineR">und leckeres Brot</span>
         </h2>
         <p class="credo__tagline credo__tagline--rise" id="credoTagline">Halal. Jeden Tag frisch.</p>
       </div>
@@ -934,7 +934,7 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   }
 
   /* ---------- Credo-Sektion: Live-Scroll-Parallax (kein Enter-Trigger, keine transition) ----------
-     "Nur Fleisch" wandert von links, "und Brot" von rechts, beide 1:1 an
+     "Frisches Fleisch" wandert von links, "und leckeres Brot" von rechts, beide 1:1 an
      den Scroll-Fortschritt der Section gekoppelt. "Halal. Jeden Tag frisch." fliegt
      am Ende der Passage von unten rein. Reversibel von Natur aus, da --sx/--ty-op
      bei jedem Scroll-Event neu aus der aktuellen Position berechnet werden. */
