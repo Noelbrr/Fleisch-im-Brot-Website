@@ -224,8 +224,11 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
    ============================================================ */
 .hero{
   position:relative;
+  /* 100lvh (large viewport height) statt 100svh: bleibt stabil, wenn
+     In-App-Browser (Snapchat, Instagram etc.) beim Scrollen ihre UI
+     ein-/ausblenden und dadurch die sichtbare Höhe laufend ändern. */
   min-height:100vh;
-  min-height:100svh;
+  min-height:100lvh;
   display:flex;
   flex-direction:column;
   justify-content:flex-end;
@@ -351,6 +354,7 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:clamp(64px,14vw,130px) 24px;
   min-height:100vh;
+  min-height:100lvh;
   overflow:hidden;
 }
 
@@ -605,9 +609,8 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 
   <!-- ============================================================
        2. CREDO-SEKTION — kein Bild, kein Video.
-       Rein grafisch/typografisch: gepinnter Scroll-Effekt (die Section
-       ist 280vh hoch, der Inhalt bleibt 100vh stehen), ein rotierender
-       3D-Spieß und eine Headline, die beim Scrollen auseinanderreißt.
+       Rein grafisch/typografisch: normaler Scroll (kein Pin), Titelzeilen
+       wandern per Live-Scroll-Parallax von links/rechts ein.
        ============================================================ -->
   <section class="credo" id="credo">
     <div class="credo__inner">
