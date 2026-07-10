@@ -294,6 +294,17 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 
 .hero__actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:10px;}
 
+/* Desktop-Duplikat des Buttons: fix, mittig unten in der Section, direkt
+   über dem Scroll-Chevron (.scroll-cue, bottom:18px). Per Default versteckt,
+   erst ab dem Desktop-Breakpoint sichtbar (siehe @media unten), wo im
+   Gegenzug der Mobile-Button im Content-Stack ausgeblendet wird. */
+.hero__actions--desktop{
+  display:none;
+  position:absolute;left:50%;bottom:60px;z-index:2;
+  transform:translateX(-50%);
+  margin-top:0;
+}
+
 .hero__tag{
   font-family:'Space Mono',monospace;font-size:.76rem;
   color:var(--smoke);letter-spacing:.05em;margin-top:2px;
@@ -329,6 +340,9 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 
   .hero__open-inline{display:none;}
   .hero__open-badge:not([hidden]){display:inline-flex;}
+
+  .hero__actions--mobile{display:none;}
+  .hero__actions--desktop{display:flex;}
 }
 
 .scroll-cue{
@@ -673,11 +687,19 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
         <span class="badge">★ 4,8 · 53 Bewertungen</span>
       </div>
 
-      <div class="hero__actions">
+      <div class="hero__actions hero__actions--mobile">
         <a href="#karte" class="btn btn--primary">Zur Karte</a>
       </div>
 
       <p class="hero__tag">100% Rindfleisch · Halal</p>
+    </div>
+
+    <!-- Desktop-Duplikat des "Zur Karte"-Buttons: mittig unten in der
+         Section, direkt über dem Scroll-Chevron. Der Button oben im
+         Content-Stack bleibt für Mobile unverändert, wird auf Desktop
+         per CSS ausgeblendet (siehe @media(min-width:860px)). -->
+    <div class="hero__actions hero__actions--desktop">
+      <a href="#karte" class="btn btn--primary">Zur Karte</a>
     </div>
 
     <div class="scroll-cue" aria-hidden="true">
