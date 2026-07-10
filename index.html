@@ -519,23 +519,12 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
    (dunkle) Section gezogen, statt einen eigenen Platz im Fluss zu
    beanspruchen — die Zacken-Täler zeigen dadurch direkt deren Fläche,
    ohne einen separaten Hintergrund-Rahmen dazwischen. Der glatte Rand
-   bleibt exakt an der Section-Grenze zur nächsten (hellen) Section.
-   Ein zusätzlicher 1px-Steg (::after) überdeckt die Naht selbst, falls
-   Sub-Pixel-Rundung (Browser-Zoom ≠ 100%, bestimmte DPR-Werte) dort eine
-   hauchdünne Lücke durchscheinen lässt. */
+   bleibt exakt an der Section-Grenze zur nächsten (hellen) Section. */
 .tear{display:block;width:100%;height:0;line-height:0;position:relative;z-index:3;}
 .tear svg{width:100%;height:44px;display:block;}
-.tear--to-bone{color:var(--bone);}
-.tear--to-bone svg{margin-top:-44px;}
+.tear--to-bone svg{margin-top:-44px;color:var(--bone);}
 .tear--to-ink{color:var(--bone);}
 .tear--to-ink svg{transform:scaleY(-1);}
-.tear::after{
-  content:"";
-  position:absolute;left:0;right:0;height:2px;
-  background:currentColor;
-}
-.tear--to-bone::after{bottom:-1px;}
-.tear--to-ink::after{top:-1px;}
 
 /* ============================================================
    FOOTER
