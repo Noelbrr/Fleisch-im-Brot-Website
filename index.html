@@ -532,6 +532,17 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 .tear--to-ink{color:var(--bone);}
 .tear--to-ink svg{transform:scaleY(-1);}
 
+/* Nur Desktop: bei DPR 1x (typisch für Desktop-Displays, anders als die
+   meist höhere Pixeldichte auf Mobile) macht ein Sub-Pixel-Rundungsfehler
+   beim Skalieren des SVG auf volle Breite eine hauchdünne Linie am unteren
+   Rand der Zacken-Fläche sichtbar. 1px zusätzliche Höhe schiebt diese Kante
+   um 1px über die Section-Grenze hinaus, sodass der Rundungsfehler in der
+   gefüllten Fläche verschwindet statt an ihrem Rand sichtbar zu werden. */
+@media(min-width:860px){
+  .tear svg{height:45px;}
+  .tear--to-bone svg{margin-top:-45px;}
+}
+
 /* ============================================================
    FOOTER
    ============================================================ */
