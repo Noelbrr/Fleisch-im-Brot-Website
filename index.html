@@ -360,9 +360,10 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 }
 .credo__title{
   font-family:'Anton',sans-serif;color:var(--bone);text-transform:uppercase;
-  /* vw-Anteil bewusst niedrig gehalten, damit "und Frisches Brot" (die längere
-     Zeile) auf jeder Viewport-Breite garantiert in eine Zeile passt. */
-  line-height:.98;font-size:clamp(2rem,8.2vw,5.6rem);
+  /* vw-Anteil so kalibriert, dass "und Frisches Brot" (die längere Zeile) auf
+     jeder Mobile-Breite (320–414px) gerade noch einzeilig passt, aber so groß
+     wie möglich bleibt. */
+  line-height:.98;font-size:clamp(2rem,11.5vw,5.6rem);
   display:flex;flex-direction:column;gap:.04em;
   width:100%;
 }
@@ -942,10 +943,10 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
         var progress = (vh - rect.top) / total;
         progress = Math.max(0, Math.min(1, progress));
 
-        // Zeilen wandern langsam über die ersten ~75% der Passage rein.
-        var sx = Math.min(1, progress / 0.75);
-        // Tagline setzt später ein und fliegt über die letzten ~40% sanft hoch.
-        var tyOp = Math.max(0, Math.min(1, (progress - 0.55) / 0.4));
+        // Zeilen wandern über die ersten ~60% der Passage rein.
+        var sx = Math.min(1, progress / 0.6);
+        // Tagline fliegt direkt im Anschluss über die restlichen ~35% hoch.
+        var tyOp = Math.max(0, Math.min(1, (progress - 0.4) / 0.35));
 
         credoLineL.style.setProperty('--sx', sx);
         credoLineR.style.setProperty('--sx', sx);
