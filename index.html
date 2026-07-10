@@ -229,7 +229,15 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
      Innenabstand zum Content sichtbar "atmet". --vh (JS, 1× beim Laden/
      Rotation gemessen, siehe <script> unten) ist die einzige Instanz, die
      dort garantiert stabil bleibt. 100vh bleibt nur als Fallback für
-     Browser ganz ohne Custom-Property-Unterstützung. */
+     Browser ganz ohne Custom-Property-Unterstützung.
+     height statt nur min-height: blendet die UI-Leiste aus (Viewport wird
+     größer), darf die Section nicht mitwachsen — sonst bleibt der unten
+     angedockte Content (justify-content:flex-end) an der alten, jetzt zu
+     kleinen Höhe kleben und wirkt, als würde er nach oben wegrutschen,
+     während unten neuer Weißraum entsteht. Eine feste Höhe hält den
+     Content immer exakt am unteren Bildschirmrand. */
+  height:100vh;
+  height:calc(var(--vh, 1vh) * 100);
   min-height:100vh;
   min-height:calc(var(--vh, 1vh) * 100);
   display:flex;
