@@ -1076,10 +1076,15 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
         var progress = (vh - rect.top) / total;
         progress = Math.max(0, Math.min(1, progress));
 
-        // Zeilen wandern über die ersten ~60% der Passage rein.
-        var sx = Math.min(1, progress / 0.6);
-        // Tagline fliegt direkt im Anschluss über die restlichen ~35% hoch.
-        var tyOp = Math.max(0, Math.min(1, (progress - 0.4) / 0.35));
+        // Zeilen wandern über die ersten ~60% der Passage rein, mit Ease-Out
+        // (kubisch), damit die Bewegung sanft ausklingt statt linear hart
+        // bei sx=1 zu stoppen.
+        var sxLinear = Math.min(1, progress / 0.6);
+        var sx = 1 - Math.pow(1 - sxLinear, 3);
+        // Tagline fliegt direkt im Anschluss über die restlichen ~35% hoch,
+        // ebenfalls mit Ease-Out.
+        var tyOpLinear = Math.max(0, Math.min(1, (progress - 0.4) / 0.35));
+        var tyOp = 1 - Math.pow(1 - tyOpLinear, 3);
 
         credoLineL.style.setProperty('--sx', sx);
         credoLineR.style.setProperty('--sx', sx);
