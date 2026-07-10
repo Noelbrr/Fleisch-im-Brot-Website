@@ -310,10 +310,10 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   color:var(--smoke);letter-spacing:.05em;margin-top:2px;
 }
 
-/* "geöffnet"-Hinweis, per JS nur eingeblendet, wenn tatsächlich offen.
-   Mobile: einfacher Text-Anhang direkt im Subtitle. Desktop: eigene
-   abgerundete Badge-Zeile (siehe @media unten), Mobile-Variante dort
-   ausgeblendet. */
+/* Live-Öffnungsstatus (offen oder geschlossen, per JS aus derselben
+   getStatus()-Logik wie bei "Besuch uns"), immer sichtbar sobald JS läuft.
+   Mobile: Text-Anhang direkt im Subtitle. Desktop: eigene abgerundete
+   Badge-Zeile (siehe @media unten), Mobile-Variante dort ausgeblendet. */
 .hero__open-inline{color:var(--ember-light);}
 .hero__open-inline:not(:empty)::before{content:" · ";color:var(--smoke);}
 
@@ -679,8 +679,8 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
       <p class="hero__subtitle">Ekmek Arası · Frisches Fleisch im Brot · Düren<span class="hero__open-inline" id="heroOpenInline"></span></p>
 
       <div class="hero__open-badge" id="heroOpenBadge" hidden>
-        <span class="status-dot is-open" aria-hidden="true"></span>
-        Jetzt geöffnet
+        <span class="status-dot" id="heroOpenDot" aria-hidden="true"></span>
+        <span id="heroOpenText"></span>
       </div>
 
       <div class="hero__meta">
@@ -1158,12 +1158,19 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
     var row = document.querySelector('.hours tr[data-day="' + now.dayIdx + '"]');
     if(row) row.classList.add('is-today');
 
-    if(status.open){
-      var heroOpenInline = document.getElementById('heroOpenInline');
-      if(heroOpenInline) heroOpenInline.textContent = 'geöffnet';
+    var heroOpenInline = document.getElementById('heroOpenInline');
+    if(heroOpenInline) heroOpenInline.textContent = status.text;
 
-      var heroOpenBadge = document.getElementById('heroOpenBadge');
-      if(heroOpenBadge) heroOpenBadge.hidden = false;
+    var heroOpenBadge = document.getElementById('heroOpenBadge');
+    var heroOpenDot = document.getElementById('heroOpenDot');
+    var heroOpenText = document.getElementById('heroOpenText');
+    if(heroOpenBadge && heroOpenDot && heroOpenText){
+      if(status.open){
+        heroOpenDot.classList.add('is-open');
+        if(!reduceMotion) heroOpenDot.classList.add('status-dot--pulse');
+      }
+      heroOpenText.textContent = status.text;
+      heroOpenBadge.hidden = false;
     }
   } catch(e){
     var fallback = document.getElementById('statusText');
