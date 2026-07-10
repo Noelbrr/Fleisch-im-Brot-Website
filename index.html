@@ -224,11 +224,13 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
    ============================================================ */
 .hero{
   position:relative;
-  /* 100lvh (large viewport height) statt 100svh: bleibt stabil, wenn
-     In-App-Browser (Snapchat, Instagram etc.) beim Scrollen ihre UI
-     ein-/ausblenden und dadurch die sichtbare Höhe laufend ändern. */
+  /* Kaskade von unsicher nach sicher: 100vh (Fallback) → 100lvh (bleibt fix,
+     wo unterstützt) → --vh-fixed (JS-berechneter Pixelwert, siehe <script>
+     unten) als letzte, garantiert stabile Instanz für In-App-Browser
+     (Snapchat, Instagram etc.), die lvh nicht sauber unterstützen. */
   min-height:100vh;
   min-height:100lvh;
+  min-height:calc(var(--vh-fixed, 1vh) * 100);
   display:flex;
   flex-direction:column;
   justify-content:flex-end;
@@ -355,6 +357,7 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   text-align:center;padding:clamp(64px,14vw,130px) 24px;
   min-height:100vh;
   min-height:100lvh;
+  min-height:calc(var(--vh-fixed, 1vh) * 100);
   overflow:hidden;
 }
 
@@ -880,12 +883,26 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* In-App-Browser (Snapchat, Instagram etc.) ändern window.innerHeight laufend,
-     wenn ihre UI beim Scrollen ein-/ausblendet. Für Scroll-Berechnungen daher
-     einen gecachten Wert verwenden, der nur bei echtem Resize aktualisiert wird
-     — sonst "zittern" scroll-gekoppelte Animationen mit der UI mit. */
+  /* In-App-Browser (Snapchat, Instagram etc.) ändern window.innerHeight laufend
+     und feuern dabei auch ganz normale 'resize'-Events, wenn ihre UI beim
+     Scrollen ein-/ausblendet — ein reiner resize-Listener cached also gar
+     nichts, er würde bei jedem UI-Wackler sofort mit-updaten. Deshalb nur bei
+     einer echten Breitenänderung (Rotation, Fenster-Resize) aktualisieren,
+     denn Browser-Chrome ein-/ausblenden ändert praktisch nie die Breite. */
   var cachedViewportHeight = window.innerHeight;
-  window.addEventListener('resize', function(){ cachedViewportHeight = window.innerHeight; }, {passive:true});
+  var cachedViewportWidth = window.innerWidth;
+
+  // --vh-fixed: CSS-Fallback für Browser, die 100lvh nicht unterstützen
+  // (z.B. ältere In-App-WebViews) — 1% der gecachten, stabilen Höhe.
+  document.documentElement.style.setProperty('--vh-fixed', (cachedViewportHeight * 0.01) + 'px');
+
+  window.addEventListener('resize', function(){
+    if(window.innerWidth !== cachedViewportWidth){
+      cachedViewportWidth = window.innerWidth;
+      cachedViewportHeight = window.innerHeight;
+      document.documentElement.style.setProperty('--vh-fixed', (cachedViewportHeight * 0.01) + 'px');
+    }
+  }, {passive:true});
 
   /* ---------- Scroll-Reveal ---------- */
   var revealEls = document.querySelectorAll('.reveal');
