@@ -226,16 +226,10 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   position:relative;
   /* Feste Höhe (nicht min-height!) über --vh, den global per JS einmalig
      gemessenen, stabilen Viewport-Wert (siehe <script> unten). Verhindert,
-     dass die Section wächst, wenn die Browser-/In-App-UI-Leiste ausblendet
-     — sonst bliebe der unten angedockte Content (justify-content:flex-end)
-     an der alten Höhe kleben und der neue Weißraum darunter läse sich wie
-     ein Wegrutschen des Contents nach oben. 100vh nur als Fallback für
-     Browser ohne Custom-Property-Unterstützung. */
+     dass die Section wächst, wenn die Browser-/In-App-UI-Leiste ausblendet.
+     100vh nur als Fallback für Browser ohne Custom-Property-Unterstützung. */
   height:100vh;
   height:calc(var(--vh, 1vh) * 100);
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
   overflow:hidden;
   background:var(--ink);
 }
@@ -247,7 +241,11 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   pointer-events:none;
 }
 .hero__content{
-  position:relative;z-index:2;
+  /* Absolut am unteren Rand von .hero verankert statt über Flexbox
+     (justify-content:flex-end) positioniert — die Position hängt dadurch
+     ausschließlich von .heros eigener (fixer) Höhe ab, nicht zusätzlich
+     von Flex-Fluss-Berechnungen. */
+  position:absolute;left:0;right:0;bottom:0;z-index:2;
   padding:0 22px calc(56px + env(safe-area-inset-bottom));
   display:flex;flex-direction:column;align-items:flex-start;gap:14px;
 }
