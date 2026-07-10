@@ -224,13 +224,13 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
    ============================================================ */
 .hero{
   position:relative;
-  /* Kaskade von unsicher nach sicher: 100vh (Fallback) → 100lvh (bleibt fix,
-     wo unterstützt) → --vh-fixed (JS-berechneter Pixelwert, siehe <script>
-     unten) als letzte, garantiert stabile Instanz für In-App-Browser
-     (Snapchat, Instagram etc.), die lvh nicht sauber unterstützen. */
+  /* Kaskade von unsicher nach sicher: 100vh (Fallback) → 100svh (ignoriert
+     UI-Leisten, moderne Browser) → --vh (JS, 1× beim Laden/Rotation gemessen)
+     als robuster Fallback für In-App-Browser (Snapchat, Instagram etc.), die
+     svh nicht sauber unterstützen oder bei UI-Wacklern trotzdem "atmen". */
   min-height:100vh;
-  min-height:100lvh;
-  min-height:calc(var(--vh-fixed, 1vh) * 100);
+  min-height:100svh;
+  min-height:calc(var(--vh, 1vh) * 100);
   display:flex;
   flex-direction:column;
   justify-content:flex-end;
@@ -356,8 +356,8 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:clamp(64px,14vw,130px) 24px;
   min-height:100vh;
-  min-height:100lvh;
-  min-height:calc(var(--vh-fixed, 1vh) * 100);
+  min-height:100svh;
+  min-height:calc(var(--vh, 1vh) * 100);
   overflow:hidden;
 }
 
@@ -883,26 +883,29 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* In-App-Browser (Snapchat, Instagram etc.) ändern window.innerHeight laufend
-     und feuern dabei auch ganz normale 'resize'-Events, wenn ihre UI beim
-     Scrollen ein-/ausblendet — ein reiner resize-Listener cached also gar
-     nichts, er würde bei jedem UI-Wackler sofort mit-updaten. Deshalb nur bei
-     einer echten Breitenänderung (Rotation, Fenster-Resize) aktualisieren,
-     denn Browser-Chrome ein-/ausblenden ändert praktisch nie die Breite. */
+  /* Stabiler --vh-Fallback gegen springende Section-Höhen in In-App-Browsern
+     (Snapchat, Instagram etc.), deren UI-Leisten beim Scrollen ein-/ausfahren
+     und dabei laufend 'resize' feuern und window.innerHeight ändern. Wir
+     messen daher nur einmal beim Laden und aktualisieren ausschließlich bei
+     echtem Orientierungswechsel (Hoch-/Querformat) — ein reiner resize-
+     Listener würde bei jedem UI-Wackler sofort mit-aktualisieren und das
+     Ruckeln reproduzieren statt es zu verhindern. */
   var cachedViewportHeight = window.innerHeight;
-  var cachedViewportWidth = window.innerWidth;
 
-  // --vh-fixed: CSS-Fallback für Browser, die 100lvh nicht unterstützen
-  // (z.B. ältere In-App-WebViews) — 1% der gecachten, stabilen Höhe.
-  document.documentElement.style.setProperty('--vh-fixed', (cachedViewportHeight * 0.01) + 'px');
+  function setStableVh(){
+    cachedViewportHeight = window.innerHeight;
+    document.documentElement.style.setProperty('--vh', (cachedViewportHeight * 0.01) + 'px');
+  }
+  setStableVh();
 
-  window.addEventListener('resize', function(){
-    if(window.innerWidth !== cachedViewportWidth){
-      cachedViewportWidth = window.innerWidth;
-      cachedViewportHeight = window.innerHeight;
-      document.documentElement.style.setProperty('--vh-fixed', (cachedViewportHeight * 0.01) + 'px');
-    }
-  }, {passive:true});
+  if(window.matchMedia){
+    var orientationMq = window.matchMedia('(orientation: portrait)');
+    var onOrientationChange = function(){ setStableVh(); };
+    if(orientationMq.addEventListener) orientationMq.addEventListener('change', onOrientationChange);
+    else if(orientationMq.addListener) orientationMq.addListener(onOrientationChange);
+  } else {
+    window.addEventListener('orientationchange', setStableVh, {passive:true});
+  }
 
   /* ---------- Scroll-Reveal ---------- */
   var revealEls = document.querySelectorAll('.reveal');
