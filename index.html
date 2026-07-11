@@ -427,6 +427,14 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   min-height:calc(var(--vh, 1vh) * 100);
   overflow:hidden;
 }
+/* Mobile: Section wirkt zu hoch bei voller Bildschirmhöhe — auf ~70%
+   reduzieren. Desktop bleibt bei 100vh/--vh. */
+@media(max-width:859px){
+  .credo__screen{
+    min-height:70vh;
+    min-height:calc(var(--vh, 1vh) * 70);
+  }
+}
 
 .credo__eyebrow{
   font-family:'Space Mono',monospace;color:var(--ember-light);
