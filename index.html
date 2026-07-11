@@ -1099,13 +1099,16 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
         var vh = cachedViewportHeight;
         // Fortschritt 0→1 über die gesamte Durchlaufstrecke der Section:
         // 0 sobald die Section von unten den Viewport erreicht, 1 sobald sie oben verlässt.
-        // +100px: kompletter Trigger-Bereich (Start UND Ende) liegt 100px
-        // früher im Scrollverlauf, da die Animation sonst zu spät startet
-        // und zu spät fertig ist.
-        // -50px auf den Nenner: das ENDE liegt zusätzlich 50px früher, auf
-        // allen Geräten, ohne den Start zu verschieben.
-        var total = rect.height + vh - 50;
-        var progress = (vh - rect.top + 100) / total;
+        // Offsets als Anteil der Gesamtstrecke (nicht als fixe Pixelzahl!):
+        // ein fixer px-Wert (z.B. die vorherigen +100/-50) wirkt auf großen
+        // Viewports (iPad, Desktop) kaum, weil die Gesamtstrecke dort viel
+        // länger ist als auf Mobile — 50px sind auf Mobile ~3% der Strecke,
+        // auf einem 1366px-iPad nur ~1.8%. Start und Ende liegen jetzt beide
+        // um einen festen Prozentsatz früher (Start ~6%, Ende zusätzlich
+        // ~3% früher), das wirkt auf jeder Gerätegröße gleich stark.
+        var rawTotal = rect.height + vh;
+        var total = rawTotal * 0.97;
+        var progress = (vh - rect.top + rawTotal * 0.06) / total;
         progress = Math.max(0, Math.min(1, progress));
 
         // Zeilen wandern über die GESAMTE Passage (0→1) rein, mit sanftem
