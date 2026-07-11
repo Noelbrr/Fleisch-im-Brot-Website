@@ -1078,8 +1078,10 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
         var vh = cachedViewportHeight;
         // Fortschritt 0→1 über die gesamte Durchlaufstrecke der Section:
         // 0 sobald die Section von unten den Viewport erreicht, 1 sobald sie oben verlässt.
+        // +50px: Trigger-Punkt liegt 50px früher im Scrollverlauf, da die
+        // Animation sonst zu spät startet.
         var total = rect.height + vh;
-        var progress = (vh - rect.top) / total;
+        var progress = (vh - rect.top + 50) / total;
         progress = Math.max(0, Math.min(1, progress));
 
         // Zeilen wandern über die GESAMTE Passage (0→1) rein, mit sanftem
