@@ -1089,7 +1089,10 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
         // +100px: kompletter Trigger-Bereich (Start UND Ende) liegt 100px
         // früher im Scrollverlauf, da die Animation sonst zu spät startet
         // und zu spät fertig ist.
-        var total = rect.height + vh;
+        // Auf Mobile zusätzlich das ENDE 20px früher (kleinerer Nenner),
+        // ohne den Start zu verschieben.
+        var isMobile = window.innerWidth < 860;
+        var total = rect.height + vh - (isMobile ? 20 : 0);
         var progress = (vh - rect.top + 100) / total;
         progress = Math.max(0, Math.min(1, progress));
 
