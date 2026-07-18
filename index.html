@@ -103,6 +103,16 @@ h2{
 }
 .section-head--dark p.lede{color:var(--smoke);}
 
+.signature__sauces{margin-top:clamp(32px,6vw,52px);}
+.signature__sauces p.lede{
+  font-family:'Manrope',sans-serif;
+  font-weight:500;
+  color:var(--ink-soft);
+  margin-top:0;margin-bottom:12px;
+  max-width:46ch;
+  font-size:1rem;
+}
+
 /* Buttons */
 .btn{
   display:inline-flex;
@@ -764,16 +774,6 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
       <div class="section-head">
         <p class="eyebrow eyebrow--dark">Seit 2026 auf der Theke</p>
         <h2>Das Beste vom Besten</h2>
-        <p class="lede">Unsere Soßen – beliebig kombinierbar:</p>
-        <div class="chips chips--light">
-          <span class="chip chip--light">Knoblauch</span>
-          <span class="chip chip--light">Samurai</span>
-          <span class="chip chip--light">Hot Pepper</span>
-          <span class="chip chip--light">Senf Dill</span>
-          <span class="chip chip--light">Yuppie</span>
-          <span class="chip chip--light">Shiraza</span>
-          <span class="chip chip--light">Barbecue</span>
-        </div>
       </div>
 
       <article class="dish">
@@ -867,6 +867,19 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
           <p class="dish__text">Gegrilltes Sucuk im Brot mit Salat und Soße nach Wahl.</p>
         </div>
       </article>
+
+      <div class="signature__sauces">
+        <p class="lede">Unsere Soßen – beliebig kombinierbar:</p>
+        <div class="chips chips--light">
+          <span class="chip chip--light">Knoblauch</span>
+          <span class="chip chip--light">Samurai</span>
+          <span class="chip chip--light">Hot Pepper</span>
+          <span class="chip chip--light">Senf Dill</span>
+          <span class="chip chip--light">Yuppie</span>
+          <span class="chip chip--light">Shiraza</span>
+          <span class="chip chip--light">Barbecue</span>
+        </div>
+      </div>
     </div>
   </section>
 
