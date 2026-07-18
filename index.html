@@ -543,10 +543,11 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 }
 .menu__item{padding:12px 0;border-bottom:1px dashed var(--line-dark);}
 .menu__item:last-child{border-bottom:none;}
-.menu__row{display:flex;align-items:baseline;gap:8px;}
+.menu__row{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
 .menu__name{
   font-family:'Space Mono',monospace;font-weight:700;text-transform:uppercase;
-  font-size:.92rem;letter-spacing:.02em;color:var(--bone);white-space:nowrap;
+  font-size:.92rem;letter-spacing:.02em;color:var(--bone);
+  white-space:normal;min-width:0;
 }
 .menu__leader{flex:1;border-bottom:2px dotted rgba(245,240,230,.28);transform:translateY(-4px);}
 .menu__price{
