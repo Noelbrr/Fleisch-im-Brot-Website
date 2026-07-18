@@ -528,6 +528,73 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 }
 
 /* ============================================================
+   BEWERTUNGEN — Google-Reviews-Slider
+   Horizontale Scroll-Snap-Leiste: nativ per Touch auf Mobile (kein JS
+   nötig), auf Desktop zusätzlich per Maus-Drag bedienbar (siehe <script>).
+   ============================================================ */
+.reviews{background:var(--bone);color:var(--ink);}
+.reviews__head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.reviews__rating{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Space Mono',monospace;
+}
+.reviews__stars{color:var(--ember);font-size:1.15rem;letter-spacing:.05em;}
+.reviews__ratingtext{color:var(--ink-soft);font-size:.85rem;}
+
+.reviews__track{
+  display:flex;gap:16px;
+  margin-top:clamp(24px,5vw,36px);
+  padding-bottom:8px;
+  overflow-x:auto;
+  scroll-snap-type:x proximity;
+  scrollbar-width:none;
+  cursor:grab;
+  /* volle Breite über den .wrap-Rand hinaus, Karten laufen bis an den
+     Viewport-Rand, damit auf Mobile die nächste Karte als Anreiz
+     hervorlugt */
+  margin-inline:calc(50% - 50vw);
+  padding-inline:calc(50vw - 50% + 22px);
+}
+.reviews__track::-webkit-scrollbar{display:none;}
+.reviews__track.is-dragging{cursor:grabbing;scroll-snap-type:none;}
+.reviews__card{
+  flex:0 0 auto;
+  width:min(320px,82vw);
+  scroll-snap-align:start;
+  border:1px solid var(--line-light);
+  background:var(--bone-2);
+  padding:20px;
+  display:flex;flex-direction:column;gap:10px;
+  user-select:none;
+}
+.reviews__stars-card{color:var(--ember);font-size:.9rem;letter-spacing:.08em;}
+.reviews__author{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:.88rem;
+  text-transform:uppercase;letter-spacing:.02em;
+}
+.reviews__avatar{
+  width:32px;height:32px;border-radius:50%;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--ember);color:var(--bone);
+  font-family:'Anton',sans-serif;font-size:.95rem;
+}
+.reviews__meta{color:var(--ink-soft);font-size:.72rem;font-family:'Space Mono',monospace;}
+.reviews__text{color:var(--ink-soft);font-size:.92rem;line-height:1.55;}
+
+.reviews__link{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-top:clamp(24px,5vw,36px);
+  font-family:'Space Mono',monospace;font-weight:700;font-size:.82rem;
+  text-transform:uppercase;letter-spacing:.05em;
+  padding:12px 20px;
+  border:1px solid var(--line-light);border-radius:999px;
+  color:var(--ink);
+  transition:border-color .2s ease, color .2s ease;
+}
+.reviews__link:hover{border-color:var(--ember);color:var(--ember);}
+
+/* ============================================================
    MENÜ / KARTE (Ticket-/Chalkboard-Optik)
    ============================================================ */
 .menu{background:var(--ink);color:var(--bone);}
@@ -886,6 +953,94 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
     </div>
   </section>
 
+  <!-- ============================================================
+       3b. BEWERTUNGEN — echte Google-Rezensionen
+       Nachnamen bewusst abgekürzt (Persönlichkeitsrecht/DSGVO: eine
+       öffentlich bei Google sichtbare Bewertung ist keine Einwilligung,
+       den vollen Namen als Testimonial auf einer fremden Website zu
+       reproduzieren).
+       ============================================================ -->
+  <section class="reviews section-pad" id="bewertungen">
+    <div class="wrap">
+      <div class="reviews__head">
+        <div class="section-head" style="margin-bottom:0;">
+          <p class="eyebrow eyebrow--dark">Was Gäste sagen</p>
+          <h2>Echte Google-Bewertungen</h2>
+        </div>
+        <div class="reviews__rating">
+          <span class="reviews__stars">★★★★★</span>
+          <span class="reviews__ratingtext">4,8 · 53 Bewertungen</span>
+        </div>
+      </div>
+
+      <div class="reviews__track" id="reviewsTrack">
+        <article class="reviews__card">
+          <span class="reviews__stars-card">★★★★★</span>
+          <div class="reviews__author">
+            <span class="reviews__avatar">S</span>
+            Sven S.
+          </div>
+          <p class="reviews__meta">vor 4 Monaten</p>
+          <p class="reviews__text">Wir waren mit 3 Arbeitskollegen dort. Der Inhaber liess mich das Fleisch vor der Bestellung probieren. Top Service. Wir hatten dann zu dritt jeder das Kavurma Brot mit Salat und Knoblauchsoße bestellt — hat uns sehr gut geschmeckt. Der Preis ist für die Qualität und Menge absolut fair. Echt mega lecker und gut.</p>
+        </article>
+
+        <article class="reviews__card">
+          <span class="reviews__stars-card">★★★★★</span>
+          <div class="reviews__author">
+            <span class="reviews__avatar">J</span>
+            Joel L.
+          </div>
+          <p class="reviews__meta">vor 2 Monaten · Local Guide</p>
+          <p class="reviews__text">Sehr netter Besitzer und eine wirklich gemütliche Atmosphäre, man fühlt sich direkt wohl. Das Essen war super lecker und hebt sich angenehm von den üblichen Angeboten ab. Auch preislich absolut fair für die gebotene Qualität. Der Service war freundlich und aufmerksam. Kann einen Besuch auf jeden Fall empfehlen.</p>
+        </article>
+
+        <article class="reviews__card">
+          <span class="reviews__stars-card">★★★★★</span>
+          <div class="reviews__author">
+            <span class="reviews__avatar">M</span>
+            Matthias B.
+          </div>
+          <p class="reviews__meta">vor 2 Wochen · Local Guide</p>
+          <p class="reviews__text">Top! Super freundliche Mitarbeiter, tolle Beratung und die Qualität des Essens absolut Klasse. Es steckt sehr viel Arbeit, Mühe und Erfahrung in der Zubereitung des Fleisches — und das merkt man dem Endprodukt auch an. Hier kommen wir mit Sicherheit noch einmal hin.</p>
+        </article>
+
+        <article class="reviews__card">
+          <span class="reviews__stars-card">★★★★★</span>
+          <div class="reviews__author">
+            <span class="reviews__avatar">M</span>
+            Melih T.
+          </div>
+          <p class="reviews__meta">vor 3 Monaten · Local Guide</p>
+          <p class="reviews__text">Endlich mal was Neues. Habe auf Empfehlung des Chefs Kavurma im Brot probiert und es hat mir richtig gut geschmeckt. Vor allem das Brot hat mich überrascht, schön fluffig und knusprig. Werde definitiv nochmal kommen.</p>
+        </article>
+
+        <article class="reviews__card">
+          <span class="reviews__stars-card">★★★★★</span>
+          <div class="reviews__author">
+            <span class="reviews__avatar">S</span>
+            Stefan K.
+          </div>
+          <p class="reviews__meta">vor einem Monat · Local Guide</p>
+          <p class="reviews__text">War heute das erste Mal dort. Standort etwas außerhalb der City, dennoch gut zu erreichen. Köstliches Sandwich und ein sehr guter Service. Düren und Umgebung haben hier eine sehr gute Alternative zum klassischen Döner.</p>
+        </article>
+
+        <article class="reviews__card">
+          <span class="reviews__stars-card">★★★★★</span>
+          <div class="reviews__author">
+            <span class="reviews__avatar">S</span>
+            Stefan H.
+          </div>
+          <p class="reviews__meta">vor 3 Monaten · Local Guide</p>
+          <p class="reviews__text">Richtig schöner Foodtruck mit viel Liebe zum Detail. Der Außenbereich ist super gemütlich und hat ein tolles türkisch angehauchtes Ambiente, was direkt für eine besondere Atmosphäre sorgt. Das Essen war sehr lecker, frisch und geschmacklich wirklich top. Absolute Empfehlung.</p>
+        </article>
+      </div>
+
+      <a href="https://www.google.com/search?q=Pnk%27s+Fleisch+im+Brot" target="_blank" rel="noopener noreferrer" class="reviews__link">
+        ★ Alle Bewertungen auf Google ansehen
+      </a>
+    </div>
+  </section>
+
   <div class="tear tear--to-ink" aria-hidden="true">
     <svg viewBox="0 0 1200 60" preserveAspectRatio="none"><path fill="currentColor" d="M0,60 L0,22 L40,38 L80,10 L120,30 L160,6 L200,34 L240,14 L280,42 L320,8 L360,36 L400,18 L440,44 L480,12 L520,38 L560,20 L600,46 L640,10 L680,34 L720,16 L760,40 L800,22 L840,48 L880,14 L920,36 L960,24 L1000,44 L1040,18 L1080,38 L1120,26 L1160,42 L1200,20 L1200,60 Z"/></svg>
   </div>
@@ -1080,6 +1235,42 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
     else if(orientationMq.addListener) orientationMq.addListener(onOrientationChange);
   } else {
     window.addEventListener('orientationchange', setStableVh, {passive:true});
+  }
+
+  /* ---------- Bewertungs-Slider: Maus-Drag für Desktop ---------- */
+  var reviewsTrack = document.getElementById('reviewsTrack');
+  if(reviewsTrack){
+    var dragActive = false;
+    var dragStartX = 0;
+    var dragStartScroll = 0;
+    var dragMoved = false;
+
+    reviewsTrack.addEventListener('mousedown', function(e){
+      dragActive = true;
+      dragMoved = false;
+      dragStartX = e.clientX;
+      dragStartScroll = reviewsTrack.scrollLeft;
+      reviewsTrack.classList.add('is-dragging');
+    });
+
+    window.addEventListener('mousemove', function(e){
+      if(!dragActive) return;
+      var delta = e.clientX - dragStartX;
+      if(Math.abs(delta) > 4) dragMoved = true;
+      reviewsTrack.scrollLeft = dragStartScroll - delta;
+    });
+
+    window.addEventListener('mouseup', function(){
+      if(!dragActive) return;
+      dragActive = false;
+      reviewsTrack.classList.remove('is-dragging');
+    });
+
+    // Verhindert, dass ein Drag versehentlich als Klick auf einen Link
+    // innerhalb der Karten interpretiert wird.
+    reviewsTrack.addEventListener('click', function(e){
+      if(dragMoved) e.preventDefault();
+    }, true);
   }
 
   /* ---------- Scroll-Reveal ---------- */
