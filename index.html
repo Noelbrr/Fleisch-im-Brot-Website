@@ -541,31 +541,56 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 .reviews__stars{color:var(--ember);font-size:1.15rem;letter-spacing:.05em;}
 .reviews__ratingtext{color:var(--ink-soft);font-size:.85rem;}
 
+/* Infinite-Loop-Slider: .reviews__viewport clippt, .reviews__track wird
+   per JS mit transform:translateX() bewegt (kein natives Scrollen) —
+   das gibt volle Kontrolle über nahtloses Looping, Momentum-Drag und
+   Snap, siehe <script> unten. Karten werden mehrfach dupliziert, damit
+   an keinem Rand eine Lücke sichtbar wird. */
+.reviews__slider{
+  display:flex;align-items:center;gap:12px;
+  margin-top:clamp(24px,5vw,36px);
+  /* volle Breite über den .wrap-Rand hinaus */
+  margin-inline:calc(50% - 50vw);
+  padding-inline:22px;
+}
+@media(min-width:860px){
+  .reviews__slider{padding-inline:32px;}
+}
+.reviews__viewport{
+  flex:1;min-width:0;
+  overflow:hidden;
+  cursor:grab;
+}
+.reviews__viewport.is-dragging{cursor:grabbing;}
 .reviews__track{
   display:flex;gap:16px;
-  margin-top:clamp(24px,5vw,36px);
-  padding-bottom:8px;
-  overflow-x:auto;
-  scroll-snap-type:x proximity;
-  scrollbar-width:none;
-  cursor:grab;
-  /* volle Breite über den .wrap-Rand hinaus, Karten laufen bis an den
-     Viewport-Rand, damit auf Mobile die nächste Karte als Anreiz
-     hervorlugt */
-  margin-inline:calc(50% - 50vw);
-  padding-inline:calc(50vw - 50% + 22px);
+  will-change:transform;
 }
-.reviews__track::-webkit-scrollbar{display:none;}
-.reviews__track.is-dragging{cursor:grabbing;scroll-snap-type:none;}
 .reviews__card{
   flex:0 0 auto;
   width:min(320px,82vw);
-  scroll-snap-align:start;
   border:1px solid var(--line-light);
   background:var(--bone-2);
   padding:20px;
   display:flex;flex-direction:column;gap:10px;
   user-select:none;
+}
+.reviews__card img{pointer-events:none;}
+
+.reviews__arrow{
+  flex:none;
+  display:none;
+  align-items:center;justify-content:center;
+  width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line-light);
+  background:var(--bone);color:var(--ink);
+  cursor:pointer;
+  transition:border-color .2s ease, color .2s ease, background .2s ease;
+}
+.reviews__arrow:hover{border-color:var(--ember);color:var(--ember);}
+.reviews__arrow:active{transform:scale(.94);}
+@media(min-width:860px){
+  .reviews__arrow{display:flex;}
 }
 .reviews__stars-card{color:var(--ember);font-size:.9rem;letter-spacing:.08em;}
 .reviews__author{
@@ -973,66 +998,16 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
         </div>
       </div>
 
-      <div class="reviews__track" id="reviewsTrack">
-        <article class="reviews__card">
-          <span class="reviews__stars-card">★★★★★</span>
-          <div class="reviews__author">
-            <span class="reviews__avatar">S</span>
-            Sven S.
-          </div>
-          <p class="reviews__meta">vor 4 Monaten</p>
-          <p class="reviews__text">Wir waren mit 3 Arbeitskollegen dort. Der Inhaber liess mich das Fleisch vor der Bestellung probieren. Top Service. Wir hatten dann zu dritt jeder das Kavurma Brot mit Salat und Knoblauchsoße bestellt — hat uns sehr gut geschmeckt. Der Preis ist für die Qualität und Menge absolut fair. Echt mega lecker und gut.</p>
-        </article>
-
-        <article class="reviews__card">
-          <span class="reviews__stars-card">★★★★★</span>
-          <div class="reviews__author">
-            <span class="reviews__avatar">J</span>
-            Joel L.
-          </div>
-          <p class="reviews__meta">vor 2 Monaten · Local Guide</p>
-          <p class="reviews__text">Sehr netter Besitzer und eine wirklich gemütliche Atmosphäre, man fühlt sich direkt wohl. Das Essen war super lecker und hebt sich angenehm von den üblichen Angeboten ab. Auch preislich absolut fair für die gebotene Qualität. Der Service war freundlich und aufmerksam. Kann einen Besuch auf jeden Fall empfehlen.</p>
-        </article>
-
-        <article class="reviews__card">
-          <span class="reviews__stars-card">★★★★★</span>
-          <div class="reviews__author">
-            <span class="reviews__avatar">M</span>
-            Matthias B.
-          </div>
-          <p class="reviews__meta">vor 2 Wochen · Local Guide</p>
-          <p class="reviews__text">Top! Super freundliche Mitarbeiter, tolle Beratung und die Qualität des Essens absolut Klasse. Es steckt sehr viel Arbeit, Mühe und Erfahrung in der Zubereitung des Fleisches — und das merkt man dem Endprodukt auch an. Hier kommen wir mit Sicherheit noch einmal hin.</p>
-        </article>
-
-        <article class="reviews__card">
-          <span class="reviews__stars-card">★★★★★</span>
-          <div class="reviews__author">
-            <span class="reviews__avatar">M</span>
-            Melih T.
-          </div>
-          <p class="reviews__meta">vor 3 Monaten · Local Guide</p>
-          <p class="reviews__text">Endlich mal was Neues. Habe auf Empfehlung des Chefs Kavurma im Brot probiert und es hat mir richtig gut geschmeckt. Vor allem das Brot hat mich überrascht, schön fluffig und knusprig. Werde definitiv nochmal kommen.</p>
-        </article>
-
-        <article class="reviews__card">
-          <span class="reviews__stars-card">★★★★★</span>
-          <div class="reviews__author">
-            <span class="reviews__avatar">S</span>
-            Stefan K.
-          </div>
-          <p class="reviews__meta">vor einem Monat · Local Guide</p>
-          <p class="reviews__text">War heute das erste Mal dort. Standort etwas außerhalb der City, dennoch gut zu erreichen. Köstliches Sandwich und ein sehr guter Service. Düren und Umgebung haben hier eine sehr gute Alternative zum klassischen Döner.</p>
-        </article>
-
-        <article class="reviews__card">
-          <span class="reviews__stars-card">★★★★★</span>
-          <div class="reviews__author">
-            <span class="reviews__avatar">S</span>
-            Stefan H.
-          </div>
-          <p class="reviews__meta">vor 3 Monaten · Local Guide</p>
-          <p class="reviews__text">Richtig schöner Foodtruck mit viel Liebe zum Detail. Der Außenbereich ist super gemütlich und hat ein tolles türkisch angehauchtes Ambiente, was direkt für eine besondere Atmosphäre sorgt. Das Essen war sehr lecker, frisch und geschmacklich wirklich top. Absolute Empfehlung.</p>
-        </article>
+      <div class="reviews__slider">
+        <button type="button" class="reviews__arrow reviews__arrow--prev" id="reviewsPrev" aria-label="Vorherige Bewertung">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="reviews__viewport" id="reviewsViewport">
+          <div class="reviews__track" id="reviewsTrack"></div>
+        </div>
+        <button type="button" class="reviews__arrow reviews__arrow--next" id="reviewsNext" aria-label="Nächste Bewertung">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
       </div>
 
       <a href="https://www.google.com/search?q=Pnk%27s+Fleisch+im+Brot" target="_blank" rel="noopener noreferrer" class="reviews__link">
@@ -1237,40 +1212,172 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
     window.addEventListener('orientationchange', setStableVh, {passive:true});
   }
 
-  /* ---------- Bewertungs-Slider: Maus-Drag für Desktop ---------- */
+  /* ---------- Bewertungs-Slider: Infinite Loop, Drag mit Momentum, Snap, Pfeile ----------
+     Prinzip: die echten Karten (REVIEWS) werden mehrfach hintereinander
+     gerendert (REPEATS Kopien), sodass der Track viel länger ist als die
+     Summe der echten Karten. Die Position wird per transform:translateX()
+     gesteuert (kein natives Scrollen), das erlaubt volles Momentum + Snap.
+     Sobald die Position über den mittleren "sicheren" Bereich hinausläuft,
+     wird sie unsichtbar (ohne Transition) um ein Vielfaches der Set-Breite
+     zurückgesetzt — dadurch wirkt das Loopen nahtlos endlos in beide
+     Richtungen. */
+  var reviewsViewport = document.getElementById('reviewsViewport');
   var reviewsTrack = document.getElementById('reviewsTrack');
-  if(reviewsTrack){
-    var dragActive = false;
-    var dragStartX = 0;
-    var dragStartScroll = 0;
-    var dragMoved = false;
+  var reviewsPrevBtn = document.getElementById('reviewsPrev');
+  var reviewsNextBtn = document.getElementById('reviewsNext');
 
-    reviewsTrack.addEventListener('mousedown', function(e){
+  if(reviewsViewport && reviewsTrack){
+    var REVIEWS = [
+      {initial:'S', name:'Sven S.', meta:'vor 4 Monaten', text:'Wir waren mit 3 Arbeitskollegen dort. Der Inhaber liess mich das Fleisch vor der Bestellung probieren. Top Service. Wir hatten dann zu dritt jeder das Kavurma Brot mit Salat und Knoblauchsoße bestellt — hat uns sehr gut geschmeckt. Der Preis ist für die Qualität und Menge absolut fair. Echt mega lecker und gut.'},
+      {initial:'J', name:'Joel L.', meta:'vor 2 Monaten · Local Guide', text:'Sehr netter Besitzer und eine wirklich gemütliche Atmosphäre, man fühlt sich direkt wohl. Das Essen war super lecker und hebt sich angenehm von den üblichen Angeboten ab. Auch preislich absolut fair für die gebotene Qualität. Der Service war freundlich und aufmerksam. Kann einen Besuch auf jeden Fall empfehlen.'},
+      {initial:'M', name:'Matthias B.', meta:'vor 2 Wochen · Local Guide', text:'Top! Super freundliche Mitarbeiter, tolle Beratung und die Qualität des Essens absolut Klasse. Es steckt sehr viel Arbeit, Mühe und Erfahrung in der Zubereitung des Fleisches — und das merkt man dem Endprodukt auch an. Hier kommen wir mit Sicherheit noch einmal hin.'},
+      {initial:'M', name:'Melih T.', meta:'vor 3 Monaten · Local Guide', text:'Endlich mal was Neues. Habe auf Empfehlung des Chefs Kavurma im Brot probiert und es hat mir richtig gut geschmeckt. Vor allem das Brot hat mich überrascht, schön fluffig und knusprig. Werde definitiv nochmal kommen.'},
+      {initial:'S', name:'Stefan K.', meta:'vor einem Monat · Local Guide', text:'War heute das erste Mal dort. Standort etwas außerhalb der City, dennoch gut zu erreichen. Köstliches Sandwich und ein sehr guter Service. Düren und Umgebung haben hier eine sehr gute Alternative zum klassischen Döner.'},
+      {initial:'S', name:'Stefan H.', meta:'vor 3 Monaten · Local Guide', text:'Richtig schöner Foodtruck mit viel Liebe zum Detail. Der Außenbereich ist super gemütlich und hat ein tolles türkisch angehauchtes Ambiente, was direkt für eine besondere Atmosphäre sorgt. Das Essen war sehr lecker, frisch und geschmacklich wirklich top. Absolute Empfehlung.'}
+    ];
+
+    function escapeHtml(s){
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function cardHtml(r){
+      return '<article class="reviews__card">' +
+        '<span class="reviews__stars-card">★★★★★</span>' +
+        '<div class="reviews__author"><span class="reviews__avatar">' + r.initial + '</span>' + escapeHtml(r.name) + '</div>' +
+        '<p class="reviews__meta">' + escapeHtml(r.meta) + '</p>' +
+        '<p class="reviews__text">' + escapeHtml(r.text) + '</p>' +
+        '</article>';
+    }
+
+    var REPEATS = 5; // ungerade Zahl: die mittlere Kopie ist der Startpunkt
+    var html = '';
+    for(var rep = 0; rep < REPEATS; rep++){
+      for(var i = 0; i < REVIEWS.length; i++) html += cardHtml(REVIEWS[i]);
+    }
+    reviewsTrack.innerHTML = html;
+
+    var cards = Array.prototype.slice.call(reviewsTrack.children);
+    var setCount = REVIEWS.length;          // Karten pro Set
+    var cardWidth = 0;                       // Kartenbreite inkl. gap, per Frame gemessen
+    var setWidth = 0;                        // Breite eines kompletten Sets
+    var currentX = 0;                        // aktuelle transform-Position (px, negativ = nach links)
+    var targetX = 0;                         // Ziel-Position für die Snap-Animation
+    var rafId = null;
+
+    function measure(){
+      var first = cards[0];
+      var second = cards[1];
+      cardWidth = second.offsetLeft - first.offsetLeft;
+      setWidth = cardWidth * setCount;
+      // Start in der Mitte (mittleres Set), damit in beide Richtungen
+      // gleich viele Kopien als Puffer vorhanden sind.
+      var middleSetIndex = Math.floor(REPEATS / 2);
+      currentX = -middleSetIndex * setWidth;
+      targetX = currentX;
+      applyTransform(false);
+    }
+
+    function applyTransform(withTransition){
+      reviewsTrack.style.transition = withTransition ? 'transform .45s cubic-bezier(.2,.7,.2,1)' : 'none';
+      reviewsTrack.style.transform = 'translateX(' + currentX + 'px)';
+    }
+
+    // Hält die Position innerhalb des sicheren mittleren Bereichs, indem sie
+    // unsichtbar (ohne Transition) um ein Vielfaches von setWidth verschoben
+    // wird, sobald sie zu weit nach links/rechts gelaufen ist — das erzeugt
+    // den nahtlosen Endlos-Effekt.
+    function wrapPosition(){
+      var minX = -setWidth * (REPEATS - 1);
+      var maxX = -setWidth * 0;
+      while(currentX < minX + setWidth){ currentX += setWidth; targetX += setWidth; }
+      while(currentX > maxX - setWidth){ currentX -= setWidth; targetX -= setWidth; }
+    }
+
+    function goToNearestCard(directionHint){
+      var index = Math.round(-targetX / cardWidth);
+      if(directionHint) index += directionHint;
+      targetX = -index * cardWidth;
+      currentX = targetX;
+      wrapPosition();
+      applyTransform(true);
+    }
+
+    // ---- Drag (Maus + Touch via Pointer Events) mit Momentum ----
+    var dragActive = false;
+    var dragMoved = false;
+    var dragStartX = 0;
+    var dragStartTransformX = 0;
+    var lastMoveX = 0;
+    var lastMoveTime = 0;
+    var velocity = 0;
+
+    function onPointerDown(e){
       dragActive = true;
       dragMoved = false;
-      dragStartX = e.clientX;
-      dragStartScroll = reviewsTrack.scrollLeft;
-      reviewsTrack.classList.add('is-dragging');
-    });
+      reviewsTrack.style.transition = 'none';
+      var point = e.touches ? e.touches[0] : e;
+      dragStartX = point.clientX;
+      dragStartTransformX = currentX;
+      lastMoveX = point.clientX;
+      lastMoveTime = performance.now ? performance.now() : Date.now();
+      velocity = 0;
+      reviewsViewport.classList.add('is-dragging');
+    }
 
-    window.addEventListener('mousemove', function(e){
+    function onPointerMove(e){
       if(!dragActive) return;
-      var delta = e.clientX - dragStartX;
+      var point = e.touches ? e.touches[0] : e;
+      var delta = point.clientX - dragStartX;
       if(Math.abs(delta) > 4) dragMoved = true;
-      reviewsTrack.scrollLeft = dragStartScroll - delta;
-    });
+      currentX = dragStartTransformX + delta;
+      applyTransform(false);
 
-    window.addEventListener('mouseup', function(){
+      var now = performance.now ? performance.now() : Date.now();
+      var dt = now - lastMoveTime;
+      if(dt > 0){
+        velocity = (point.clientX - lastMoveX) / dt; // px pro ms
+        lastMoveX = point.clientX;
+        lastMoveTime = now;
+      }
+    }
+
+    function onPointerUp(){
       if(!dragActive) return;
       dragActive = false;
-      reviewsTrack.classList.remove('is-dragging');
-    });
+      reviewsViewport.classList.remove('is-dragging');
 
-    // Verhindert, dass ein Drag versehentlich als Klick auf einen Link
-    // innerhalb der Karten interpretiert wird.
-    reviewsTrack.addEventListener('click', function(e){
+      // Momentum: Endgeschwindigkeit auf die Zielposition projizieren,
+      // dann auf die nächste Karte einrasten.
+      var momentum = velocity * 220; // Projektion ~220ms Nachlauf
+      targetX = currentX + momentum;
+      var index = Math.round(-targetX / cardWidth);
+      targetX = -index * cardWidth;
+      currentX = targetX;
+      wrapPosition();
+      applyTransform(true);
+    }
+
+    reviewsViewport.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+    reviewsViewport.addEventListener('touchstart', onPointerDown, {passive:true});
+    reviewsViewport.addEventListener('touchmove', onPointerMove, {passive:true});
+    reviewsViewport.addEventListener('touchend', onPointerUp);
+
+    // Verhindert, dass ein Drag versehentlich als Klick interpretiert wird.
+    reviewsViewport.addEventListener('click', function(e){
       if(dragMoved) e.preventDefault();
     }, true);
+
+    if(reviewsPrevBtn) reviewsPrevBtn.addEventListener('click', function(){ goToNearestCard(-1); });
+    if(reviewsNextBtn) reviewsNextBtn.addEventListener('click', function(){ goToNearestCard(1); });
+
+    measure();
+    window.addEventListener('resize', function(){
+      // Bei Breitenänderung (Rotation, Resize) Kartenbreite neu messen und
+      // Position proportional beibehalten (auf die nächste Karte einrasten).
+      measure();
+    }, {passive:true});
   }
 
   /* ---------- Scroll-Reveal ---------- */
