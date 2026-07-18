@@ -634,6 +634,29 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(200,69,28,.45);}50%{box-shadow:0 0 0 6px rgba(200,69,28,0);}}
 .status-text{font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;letter-spacing:.01em;}
 
+.visit__photo{
+  margin-bottom:clamp(28px,5vw,40px);
+  margin-inline:calc(50% - 50vw);
+  padding-inline:22px;
+}
+@media(min-width:860px){
+  .visit__photo{padding-inline:0;}
+}
+.visit__photo-mask{
+  position:relative;
+  height:clamp(220px,42vw,380px);
+  overflow:hidden;
+  clip-path:polygon(0% 0%, 0.00% 6%, 7.14% 0%, 14.29% 6%, 21.43% 0%, 28.57% 6%, 35.71% 0%, 42.86% 6%, 50.00% 0%, 57.14% 6%, 64.29% 0%, 71.43% 6%, 78.57% 0%, 85.71% 6%, 92.86% 0%, 100.00% 6%, 100.00% 94%, 92.86% 100%, 85.71% 94%, 78.57% 100%, 71.43% 94%, 64.29% 100%, 57.14% 94%, 50.00% 100%, 42.86% 94%, 35.71% 100%, 28.57% 94%, 21.43% 100%, 14.29% 94%, 7.14% 100%, 0.00% 94%);
+  background:var(--ink);
+}
+.visit__photo-img{
+  position:absolute;
+  top:-12%;left:0;
+  width:100%;height:124%;
+  object-fit:cover;
+  will-change:transform;
+}
+
 .visit__grid{display:grid;gap:18px;grid-template-columns:1fr;margin-bottom:22px;}
 @media(min-width:640px){.visit__grid{grid-template-columns:1fr 1fr;}}
 
@@ -1013,6 +1036,12 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
         <span class="status-text" id="statusText">Öffnungsstatus wird geladen …</span>
       </div>
 
+      <div class="visit__photo reveal" aria-hidden="false">
+        <div class="visit__photo-mask">
+          <img src="PKNs_Fleisch_im_Brot_Sitzbereich_Dueren_Web.webp" alt="Überdachter Sitzbereich mit Grilltischen bei PNK’S Fleisch im Brot" class="visit__photo-img" id="visitPhotoImg" loading="lazy">
+        </div>
+      </div>
+
       <div class="visit__grid">
         <div class="visit__card reveal">
           <h3>Adresse</h3>
@@ -1330,6 +1359,30 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
     }, {passive:true});
   }
 
+  var visitPhotoImg = document.getElementById('visitPhotoImg');
+  if(visitPhotoImg && !reduceMotion){
+    var visitPhotoMask = visitPhotoImg.parentElement;
+    var visitPhotoTicking = false;
+    var updateVisitPhotoParallax = function(){
+      var rect = visitPhotoMask.getBoundingClientRect();
+      var vh = cachedViewportHeight;
+      var center = rect.top + rect.height / 2;
+      var offset = (vh / 2 - center) / vh;
+      var clamped = Math.max(-1, Math.min(1, offset));
+      var maxShiftPct = 10;
+      visitPhotoImg.style.transform = 'translateY(' + (clamped * maxShiftPct) + '%)';
+    };
+    window.addEventListener('scroll', function(){
+      if(!visitPhotoTicking){
+        window.requestAnimationFrame(function(){
+          updateVisitPhotoParallax();
+          visitPhotoTicking = false;
+        });
+        visitPhotoTicking = true;
+      }
+    }, {passive:true});
+    updateVisitPhotoParallax();
+  }
 
   var credoLineL = document.getElementById('credoLineL');
   var credoLineR = document.getElementById('credoLineR');
