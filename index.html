@@ -562,12 +562,12 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 /* Infinite-Loop-Slider, zwei komplett getrennte Mechaniken je Gerät:
    MOBILE (< 860px): echtes natives Scroll-Carousel. .reviews__viewport
    scrollt selbst (overflow-x:auto) mit scroll-snap-type:x mandatory.
-   touch-action:pan-y (nicht pan-x!) sagt dem Browser: vertikales Scrollen
-   der Seite bleibt jederzeit erlaubt, aber sobald eine Geste erkennbar
-   horizontal ist, übernimmt der Browser nativ das interne overflow-x-
-   Scrollen — das verhindert das hakige Verhalten des früheren eigenen
-   JS-Drags, OHNE (wie pan-x es täte) vertikales Scrollen dauerhaft zu
-   blockieren, sobald der Finger nur auf dem Slider aufsetzt.
+   touch-action:pan-x pan-y erlaubt dem Browser BEIDE Richtungen nativ zu
+   handhaben — nur eine einzelne Richtung zu setzen (pan-x oder pan-y)
+   deaktiviert die jeweils andere komplett auf diesem Element, statt dem
+   Browser die Erkennung "welche Richtung meint die Geste tatsächlich" zu
+   überlassen. overscroll-behavior-x:contain verhindert zusätzlich, dass
+   horizontales Scrollen am Rand auf die restliche Seite durchschlägt.
    DESKTOP (≥ 860px): .reviews__track wird per JS mit transform:translateX()
    bewegt (kein natives Scrollen), das erlaubt Maus-Drag mit Momentum und
    die Pfeil-Buttons — siehe <script> unten. Karten werden mehrfach
@@ -583,7 +583,8 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   overflow-x:auto;
   overflow-y:hidden;
   scroll-snap-type:x mandatory;
-  touch-action:pan-y;
+  touch-action:pan-x pan-y;
+  overscroll-behavior-x:contain;
   scrollbar-width:none;
   -webkit-overflow-scrolling:touch;
 }
