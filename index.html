@@ -627,16 +627,20 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 .reviews__text{color:var(--ink-soft);font-size:.92rem;line-height:1.55;}
 
 .reviews__link{
-  display:inline-flex;align-items:center;gap:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:fit-content;margin-inline:auto;
   margin-top:clamp(24px,5vw,36px);
-  font-family:'Space Mono',monospace;font-weight:700;font-size:.82rem;
-  text-transform:uppercase;letter-spacing:.05em;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:.68rem;
+  text-transform:uppercase;letter-spacing:.05em;text-align:center;
   padding:12px 20px;
   border:1px solid var(--line-light);border-radius:999px;
   color:var(--ink);
   transition:border-color .2s ease, color .2s ease;
 }
 .reviews__link:hover{border-color:var(--ember);color:var(--ember);}
+@media(min-width:860px){
+  .reviews__link{font-size:.82rem;margin-inline:0;}
+}
 
 /* ============================================================
    MENÜ / KARTE (Ticket-/Chalkboard-Optik)
