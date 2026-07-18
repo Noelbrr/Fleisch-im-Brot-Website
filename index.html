@@ -561,11 +561,13 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
 
 /* Infinite-Loop-Slider, zwei komplett getrennte Mechaniken je Gerät:
    MOBILE (< 860px): echtes natives Scroll-Carousel. .reviews__viewport
-   scrollt selbst (overflow-x:auto) mit scroll-snap-type:x mandatory und
-   touch-action:pan-x — der Browser übernimmt das komplette Touch-Handling
-   nativ und garantiert dadurch, dass ein horizontaler Swipe niemals
-   gleichzeitig als vertikales Scrollen der Seite interpretiert wird (das
-   war die Ursache des hakigen/verbuggten Verhaltens beim eigenen JS-Drag).
+   scrollt selbst (overflow-x:auto) mit scroll-snap-type:x mandatory.
+   touch-action:pan-y (nicht pan-x!) sagt dem Browser: vertikales Scrollen
+   der Seite bleibt jederzeit erlaubt, aber sobald eine Geste erkennbar
+   horizontal ist, übernimmt der Browser nativ das interne overflow-x-
+   Scrollen — das verhindert das hakige Verhalten des früheren eigenen
+   JS-Drags, OHNE (wie pan-x es täte) vertikales Scrollen dauerhaft zu
+   blockieren, sobald der Finger nur auf dem Slider aufsetzt.
    DESKTOP (≥ 860px): .reviews__track wird per JS mit transform:translateX()
    bewegt (kein natives Scrollen), das erlaubt Maus-Drag mit Momentum und
    die Pfeil-Buttons — siehe <script> unten. Karten werden mehrfach
@@ -581,7 +583,7 @@ noscript .reveal,body.no-js .reveal{opacity:1;transform:none;}
   overflow-x:auto;
   overflow-y:hidden;
   scroll-snap-type:x mandatory;
-  touch-action:pan-x;
+  touch-action:pan-y;
   scrollbar-width:none;
   -webkit-overflow-scrolling:touch;
 }
